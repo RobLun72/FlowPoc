@@ -13,6 +13,7 @@ export interface DepartmentFilter {
 
 export interface ReportViz2Props {
   user: string;
+  jwt: string;
 }
 
 export function ReportViz2({ user }: ReportViz2Props) {
