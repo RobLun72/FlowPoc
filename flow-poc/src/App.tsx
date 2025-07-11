@@ -2,14 +2,20 @@ import { useState } from "react";
 import "./App.css";
 
 import { ReportViz } from "./components/reportViz";
+import { ReportViz2 } from "./components/reportViz2";
 
 function App() {
   const [userComboValue, setUserComboValue] = useState<string>("adam");
+  const [reportToShow, setReportToShow] = useState<string>("report1");
 
   const parseUserFilter = async (user?: string) => {
     if (user !== undefined) {
       setUserComboValue(user);
     }
+  };
+
+  const onPageShow = (reportName: string) => async () => {
+    setReportToShow(reportName);
   };
 
   return (
@@ -32,8 +38,38 @@ function App() {
             Eva
           </option>
         </select>
+        <button
+          onClick={onPageShow("report1")}
+          style={{
+            marginLeft: "20px",
+            background: "#4CAF50",
+            color: "white",
+            padding: "10px 15px",
+            border: "none",
+            borderRadius: "5px",
+          }}
+        >
+          Report using vizFilter
+        </button>
+        <button
+          onClick={onPageShow("report2")}
+          style={{
+            marginLeft: "20px",
+            background: "#4CAF50",
+            color: "white",
+            padding: "10px 15px",
+            border: "none",
+            borderRadius: "5px",
+          }}
+        >
+          Report using custom view
+        </button>
       </div>
-      <ReportViz user={userComboValue} />
+
+      {reportToShow === "report1" && <ReportViz user={userComboValue} />}
+      <div style={{ marginTop: "20px" }} />
+      {reportToShow === "report2" && <ReportViz2 user={userComboValue} />}
+      <div style={{ marginTop: "20px" }} />
     </div>
   );
 }
