@@ -4,6 +4,7 @@ import {
   useTableauVizFilterChangedCallback,
   useTableauVizRef,
 } from "@tableau/embedding-api-react";
+import { useLocation } from "react-router-dom";
 
 export interface DepartmentFilter {
   fieldName: string;
@@ -11,10 +12,17 @@ export interface DepartmentFilter {
 }
 
 export interface ReportVizProps {
-  user: string;
+  user?: string;
 }
 
 export function ReportViz({ user }: ReportVizProps) {
+  const page = useLocation();
+  const qParams = new URLSearchParams(page.search);
+
+  if (qParams.has("user")) {
+    user = qParams.get("user") || user;
+  }
+
   const vizRef = useTableauVizRef();
   const field = "Department";
 
@@ -103,11 +111,13 @@ export function ReportViz({ user }: ReportVizProps) {
     // This function is called when a filter is changed in the Tableau viz.
     // We will check if the Department filter is applied and store it in localStorage.
     const sheetFilters = await getActiveSheet().getFiltersAsync();
-    const departmentFilter = sheetFilters.find((f) => f.fieldName === field);
+    const departmentFilter = sheetFilters.find(
+      (f: { fieldName: string }) => f.fieldName === field
+    );
     if (departmentFilter) {
       const department = (
         departmentFilter as Api.CategoricalFilter
-      ).appliedValues.map((v) => v.value);
+      ).appliedValues.map((v: { value: unknown }) => v.value);
 
       const filter: DepartmentFilter = {
         fieldName: field,
@@ -162,7 +172,7 @@ export function ReportViz({ user }: ReportVizProps) {
   return (
     <div>
       <div style={{ display: "flex", gap: "10px", marginBottom: "20px" }}>
-        <span style={{ fontWeight: "bold", paddingTop: "10px" }}>
+        <span style={{ fontWeight: "bold", paddingTop: "13px" }}>
           Department:
         </span>
         <select
@@ -181,27 +191,13 @@ export function ReportViz({ user }: ReportVizProps) {
         </select>
         <button
           onClick={onExportPDF}
-          style={{
-            marginLeft: "20px",
-            background: "#4CAF50",
-            color: "white",
-            padding: "10px 15px",
-            border: "none",
-            borderRadius: "5px",
-          }}
+          className="ml-4 bg-green-700 text-white px-4 py-2 rounded"
         >
           Export PDF
         </button>
         <button
           onClick={onExportExcel}
-          style={{
-            marginLeft: "20px",
-            background: "#4CAF50",
-            color: "white",
-            padding: "10px 15px",
-            border: "none",
-            borderRadius: "5px",
-          }}
+          className="ml-4 bg-green-700 text-white px-4 py-2 rounded"
         >
           Export Excel
         </button>
