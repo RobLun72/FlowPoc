@@ -5,6 +5,7 @@ import {
   useTableauVizRef,
 } from "@tableau/embedding-api-react";
 import { useCallback, useEffect } from "react";
+import { useLocation } from "react-router-dom";
 
 export interface DepartmentFilter {
   fieldName: string;
@@ -12,11 +13,18 @@ export interface DepartmentFilter {
 }
 
 export interface ReportViz2Props {
-  user: string;
-  jwt: string;
+  user?: string;
+  jwt?: string;
 }
 
 export function ReportViz2({ user }: ReportViz2Props) {
+  const page = useLocation();
+  const qParams = new URLSearchParams(page.search);
+
+  if (qParams.has("user")) {
+    user = qParams.get("user") || user;
+  }
+
   const vizRef = useTableauVizRef();
 
   const getActiveWorkbook = useCallback(<T extends Api.Workbook>(): T => {
@@ -67,7 +75,7 @@ export function ReportViz2({ user }: ReportViz2Props) {
   );
 
   useEffect(() => {
-    onGetCustomView(user);
+    onGetCustomView(user!);
   }, [onGetCustomView, user]);
 
   const onExportPDF = async () => {
@@ -103,66 +111,31 @@ export function ReportViz2({ user }: ReportViz2Props) {
       <div style={{ display: "flex", gap: "10px", marginBottom: "20px" }}>
         <button
           onClick={onExportPDF}
-          style={{
-            marginLeft: "20px",
-            background: "#4CAF50",
-            color: "white",
-            padding: "10px 15px",
-            border: "none",
-            borderRadius: "5px",
-          }}
+          className="ml-4 bg-green-700 text-white px-4 py-2 rounded"
         >
           Export PDF
         </button>
         <button
           onClick={onExportExcel}
-          style={{
-            marginLeft: "20px",
-            background: "#4CAF50",
-            color: "white",
-            padding: "10px 15px",
-            border: "none",
-            borderRadius: "5px",
-          }}
+          className="ml-4 bg-green-700 text-white px-4 py-2 rounded"
         >
           Export Excel
         </button>
         <button
           onClick={onSaveCustomView}
-          style={{
-            marginLeft: "20px",
-            background: "#4CAF50",
-            color: "white",
-            padding: "10px 15px",
-            border: "none",
-            borderRadius: "5px",
-          }}
+          className="ml-4 bg-green-700 text-white px-4 py-2 rounded"
         >
           save filter
         </button>
         <button
-          onClick={() => onGetCustomView(user)}
-          style={{
-            marginLeft: "20px",
-            background: "#4CAF50",
-            color: "white",
-            padding: "10px 15px",
-            border: "none",
-            borderRadius: "5px",
-          }}
+          onClick={() => onGetCustomView(user!)}
+          className="ml-4 bg-green-700 text-white px-4 py-2 rounded"
         >
           apply filter
         </button>
         <button
           onClick={() => onGetCustomView("")}
-          style={{
-            marginLeft: "20px",
-            background: "#4CAF50",
-            color: "white",
-            padding: "10px 15px",
-            border: "none",
-            borderRadius: "5px",
-          }}
+          className="ml-4 bg-green-700 text-white px-4 py-2 rounded"
         >
           apply default filter
         </button>
