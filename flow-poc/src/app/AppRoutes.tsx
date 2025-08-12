@@ -1,7 +1,7 @@
 import type { FunctionComponent } from "react";
-import { Home } from "./components/home";
-import { ReportViz } from "./components/reportViz";
-import { ReportViz2 } from "./components/reportViz2";
+import { Home } from "../pages/home";
+import { ReportViz } from "../pages/reportViz";
+import { ReportViz2 } from "../pages/reportViz2";
 import { Route, Routes } from "react-router-dom";
 import { useAppContext } from "./AppContext";
 

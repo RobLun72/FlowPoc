@@ -5,6 +5,7 @@ import {
   useTableauVizRef,
 } from "@tableau/embedding-api-react";
 import { useLocation } from "react-router-dom";
+import { Button } from "../components/ui/button";
 
 export interface DepartmentFilter {
   fieldName: string;
@@ -50,8 +51,6 @@ export function ReportViz({ user }: ReportVizProps) {
   };
 
   const parseDepartmentFilter = async (department?: string) => {
-    console.log("Parsing department filter:", department);
-
     if (department !== undefined) {
       const options: Api.FilterOptions = { isExcludeMode: false };
 
@@ -90,7 +89,7 @@ export function ReportViz({ user }: ReportVizProps) {
           await worksheet.clearFilterAsync(field);
         } catch {
           // Handle if the field doesn't exist on this worksheet
-          console.warn(
+          console.error(
             `Field ${field} not found on worksheet ${worksheet.name}`
           );
         }
@@ -172,14 +171,13 @@ export function ReportViz({ user }: ReportVizProps) {
   return (
     <div>
       <div style={{ display: "flex", gap: "10px", marginBottom: "20px" }}>
-        <span style={{ fontWeight: "bold", paddingTop: "13px" }}>
+        <span style={{ fontWeight: "bold", paddingTop: "7px" }}>
           Department:
         </span>
         <select
-          style={{ marginTop: "12px", marginBottom: "9px" }}
+          style={{ marginTop: "7px", marginBottom: "9px" }}
           defaultValue=""
           onChange={(event) => {
-            console.log("Department changed:", event.target.value);
             parseDepartmentFilter(
               event.target.value !== "all" ? event.target.value : undefined
             );
@@ -189,18 +187,18 @@ export function ReportViz({ user }: ReportVizProps) {
           <option value="65455">65455</option>
           <option value="65456">65456</option>
         </select>
-        <button
+        <Button
           onClick={onExportPDF}
-          className="ml-4 bg-green-700 text-white px-4 py-2 rounded"
+          className="ml-4 bg-app-primary hover:bg-app-primary-hover text-white"
         >
           Export PDF
-        </button>
-        <button
+        </Button>
+        <Button
           onClick={onExportExcel}
-          className="ml-4 bg-green-700 text-white px-4 py-2 rounded"
+          className="ml-4 bg-app-primary hover:bg-app-primary-hover text-white"
         >
           Export Excel
-        </button>
+        </Button>
       </div>
       <TableauViz
         ref={vizRef}
