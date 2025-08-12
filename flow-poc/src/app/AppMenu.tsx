@@ -8,7 +8,7 @@ import {
   NavigationMenuTrigger,
   //navigationMenuTriggerStyle,
 } from "@/components/ui/navigation-menu";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { useAppContext } from "./AppContext";
 
 interface MenuComponentProps {
@@ -20,8 +20,14 @@ interface MenuComponentProps {
 const components: MenuComponentProps[] = [
   {
     topMenu: "Reports",
-    paths: ["report1", "report2"],
+    paths: ["", "report1", "report2"],
     items: [
+      {
+        title: "Start",
+        href: "/",
+        path: "",
+        description: "Presentation of the reports",
+      },
       {
         title: "Report using vizFilter",
         href: "/report1",
@@ -30,7 +36,7 @@ const components: MenuComponentProps[] = [
       },
       {
         title: "Report using custom view",
-        href: `/report2`,
+        href: "/report2",
         path: "report2",
         description: "Server filtering",
       },
@@ -42,19 +48,19 @@ export function AppMenu() {
   const { user, setUser } = useAppContext();
 
   const mapComponents: MenuComponentProps[] = components;
-  const pathParts = window.location.pathname.split("/");
+  const location = useLocation();
+  const pathParts = location.pathname.split("/");
 
   const parseUserFilter = async (user?: string) => {
     if (user !== undefined) {
       setUser(user);
-      console.log("menu User changed:", user);
     }
   };
 
   return (
     <div className="flex md:min-w-3xl min-w-sm max-w-7xl items-center justify-between bg-neutral-100 px-4 py-2">
       <div className="flex items-center">
-        <Link to="/" className="text-xl font-bold text-green-700 mr-4">
+        <Link to="/" className="text-xl font-bold text-app-primary mr-4">
           Tableau embed
         </Link>
         <NavigationMenu>
@@ -78,10 +84,18 @@ export function AppMenu() {
                         href={item.href}
                         className={cn(
                           "",
-                          pathParts[1] === item.path && "bg-neutral-200"
+                          pathParts[1] === item.path &&
+                            "bg-app-primary text-white"
                         )}
                       >
-                        {item.description}
+                        <p
+                          className={cn(
+                            "line-clamp-2 text-xs leading-snug text-gray-200 group-hover:text-accent-foreground",
+                            pathParts[1] !== item.path && "text-gray-400"
+                          )}
+                        >
+                          {item.description}
+                        </p>
                       </ListItem>
                     ))}
                   </ul>
@@ -99,7 +113,6 @@ export function AppMenu() {
             style={{ padding: "2px" }}
             defaultValue=""
             onChange={(event) => {
-              console.log("User changed:", event.target.value);
               parseUserFilter(event.target.value);
             }}
           >
@@ -132,14 +145,14 @@ const ListItem = ({
       <Link
         to={href}
         className={cn(
-          "block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground",
+          "group block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground",
           className
         )}
       >
         <div className="text-sm font-medium leading-none">{title}</div>
-        <p className="line-clamp-2 text-sm leading-snug text-muted-foreground">
-          {children}
-        </p>
+        {/* <p className="line-clamp-2 text-xs leading-snug text-gray-200 group-hover:text-accent-foreground"> */}
+        {children}
+        {/* </p> */}
       </Link>
     </li>
   );

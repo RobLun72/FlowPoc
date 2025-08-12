@@ -6,6 +6,7 @@ import {
 } from "@tableau/embedding-api-react";
 import { useCallback, useEffect } from "react";
 import { useLocation } from "react-router-dom";
+import { Button } from "../components/ui/button";
 
 export interface DepartmentFilter {
   fieldName: string;
@@ -109,36 +110,36 @@ export function ReportViz2({ user }: ReportViz2Props) {
   return (
     <div>
       <div style={{ display: "flex", gap: "10px", marginBottom: "20px" }}>
-        <button
+        <Button
           onClick={onExportPDF}
-          className="ml-4 bg-green-700 text-white px-4 py-2 rounded"
+          className="ml-4 bg-app-primary hover:bg-app-primary-hover text-white"
         >
           Export PDF
-        </button>
-        <button
+        </Button>
+        <Button
           onClick={onExportExcel}
-          className="ml-4 bg-green-700 text-white px-4 py-2 rounded"
+          className="ml-4 bg-app-primary hover:bg-app-primary-hover text-white"
         >
           Export Excel
-        </button>
-        <button
+        </Button>
+        <Button
           onClick={onSaveCustomView}
-          className="ml-4 bg-green-700 text-white px-4 py-2 rounded"
+          className="ml-4 bg-app-primary hover:bg-app-primary-hover text-white"
         >
           save filter
-        </button>
-        <button
+        </Button>
+        <Button
           onClick={() => onGetCustomView(user!)}
-          className="ml-4 bg-green-700 text-white px-4 py-2 rounded"
+          className="ml-4 bg-app-primary hover:bg-app-primary-hover text-white"
         >
           apply filter
-        </button>
-        <button
+        </Button>
+        <Button
           onClick={() => onGetCustomView("")}
-          className="ml-4 bg-green-700 text-white px-4 py-2 rounded"
+          className="ml-4 bg-app-primary hover:bg-app-primary-hover text-white"
         >
           apply default filter
-        </button>
+        </Button>
       </div>
       <TableauViz
         ref={vizRef}
