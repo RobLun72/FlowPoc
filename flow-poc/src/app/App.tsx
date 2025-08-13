@@ -6,7 +6,7 @@ import { AppContextProvider } from "./AppContextProvider";
 function App() {
   return (
     <AppContextProvider>
-      <div style={{ minWidth: "1200px" }}>
+      <div className="bg-white w-fit md:min-w-7xl">
         <Router>
           <AppLayout />
         </Router>

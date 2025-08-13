@@ -7,6 +7,8 @@ import {
 import { useCallback, useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import { Button } from "../components/ui/button";
+import { cn } from "@/lib/utils";
+import { useResponsive } from "@/lib/useResponsive";
 
 export interface DepartmentFilter {
   fieldName: string;
@@ -25,6 +27,8 @@ export function ReportViz2({ user }: ReportViz2Props) {
   if (qParams.has("user")) {
     user = qParams.get("user") || user;
   }
+
+  const { isMobile } = useResponsive();
 
   const vizRef = useTableauVizRef();
 
@@ -109,7 +113,12 @@ export function ReportViz2({ user }: ReportViz2Props) {
 
   return (
     <div>
-      <div style={{ display: "flex", gap: "10px", marginBottom: "20px" }}>
+      <div
+        className={cn(
+          "flex gap-2.5 mb-5 min-w-sm w-fit md:min-w-3xl md:max-w-7xl",
+          isMobile && "flex-col"
+        )}
+      >
         <Button
           onClick={onExportPDF}
           className="ml-4 bg-app-primary hover:bg-app-primary-hover text-white"
@@ -143,7 +152,8 @@ export function ReportViz2({ user }: ReportViz2Props) {
       </div>
       <TableauViz
         ref={vizRef}
-        width="1000px"
+        width={isMobile ? "420px" : "1200px"}
+        device={isMobile ? "phone" : "desktop"}
         height="900px"
         src="https://public.tableau.com/views/OverbudgetTravel/Dashboard1"
         toolbar="hidden" // Hide entire toolbar

@@ -3,10 +3,8 @@ import {
   NavigationMenu,
   NavigationMenuContent,
   NavigationMenuItem,
-  //NavigationMenuLink,
   NavigationMenuList,
   NavigationMenuTrigger,
-  //navigationMenuTriggerStyle,
 } from "@/components/ui/navigation-menu";
 import { Link, useLocation } from "react-router-dom";
 import { useAppContext } from "./AppContext";
@@ -47,7 +45,6 @@ const components: MenuComponentProps[] = [
 export function AppMenu() {
   const { user, setUser } = useAppContext();
 
-  const mapComponents: MenuComponentProps[] = components;
   const location = useLocation();
   const pathParts = location.pathname.split("/");
 
@@ -58,14 +55,14 @@ export function AppMenu() {
   };
 
   return (
-    <div className="flex md:min-w-3xl min-w-sm max-w-7xl items-center justify-between bg-neutral-100 px-4 py-2">
+    <div className="flex min-w-sm max-w-md md:min-w-3xl md:max-w-7xl items-center justify-between bg-neutral-100 px-4 py-2">
       <div className="flex items-center">
         <Link to="/" className="text-xl font-bold text-app-primary mr-4">
           Tableau embed
         </Link>
         <NavigationMenu>
           <NavigationMenuList>
-            {mapComponents.map((component) => (
+            {components.map((component) => (
               <NavigationMenuItem key={"menu-" + component.topMenu}>
                 <NavigationMenuTrigger
                   className={cn(
@@ -88,14 +85,14 @@ export function AppMenu() {
                             "bg-app-primary text-white"
                         )}
                       >
-                        <p
+                        <ListItemDescription
                           className={cn(
-                            "line-clamp-2 text-xs leading-snug text-gray-200 group-hover:text-accent-foreground",
+                            "",
                             pathParts[1] !== item.path && "text-gray-400"
                           )}
                         >
                           {item.description}
-                        </p>
+                        </ListItemDescription>
                       </ListItem>
                     ))}
                   </ul>
@@ -106,11 +103,11 @@ export function AppMenu() {
         </NavigationMenu>
       </div>
 
-      <div style={{ float: "right", marginRight: "20px" }}>
-        <div style={{ display: "flex", gap: "10px" }}>
-          <span style={{ fontWeight: "bold", paddingTop: "2px" }}>User:</span>
+      <div className="float-right mr-5">
+        <div className="flex gap-2">
+          <span className="font-bold pt-2">User:</span>
           <select
-            style={{ padding: "2px" }}
+            className="p-2"
             defaultValue=""
             onChange={(event) => {
               parseUserFilter(event.target.value);
@@ -155,5 +152,24 @@ const ListItem = ({
         {/* </p> */}
       </Link>
     </li>
+  );
+};
+
+const ListItemDescription = ({
+  className,
+  children,
+}: {
+  className: string;
+  children: React.ReactNode;
+}) => {
+  return (
+    <p
+      className={cn(
+        "line-clamp-2 text-xs leading-snug text-gray-200 group-hover:text-accent-foreground",
+        className
+      )}
+    >
+      {children}
+    </p>
   );
 };

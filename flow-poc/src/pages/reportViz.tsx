@@ -6,6 +6,8 @@ import {
 } from "@tableau/embedding-api-react";
 import { useLocation } from "react-router-dom";
 import { Button } from "../components/ui/button";
+import { useResponsive } from "@/lib/useResponsive";
+import { cn } from "@/lib/utils";
 
 export interface DepartmentFilter {
   fieldName: string;
@@ -23,6 +25,8 @@ export function ReportViz({ user }: ReportVizProps) {
   if (qParams.has("user")) {
     user = qParams.get("user") || user;
   }
+
+  const { isMobile } = useResponsive();
 
   const vizRef = useTableauVizRef();
   const field = "Department";
@@ -170,23 +174,28 @@ export function ReportViz({ user }: ReportVizProps) {
 
   return (
     <div>
-      <div style={{ display: "flex", gap: "10px", marginBottom: "20px" }}>
-        <span style={{ fontWeight: "bold", paddingTop: "7px" }}>
-          Department:
-        </span>
-        <select
-          style={{ marginTop: "7px", marginBottom: "9px" }}
-          defaultValue=""
-          onChange={(event) => {
-            parseDepartmentFilter(
-              event.target.value !== "all" ? event.target.value : undefined
-            );
-          }}
-        >
-          <option value="all">All</option>
-          <option value="65455">65455</option>
-          <option value="65456">65456</option>
-        </select>
+      <div
+        className={cn(
+          "flex gap-2.5 mb-5 min-w-sm w-fit md:min-w-3xl md:max-w-7xl",
+          isMobile && "flex-col"
+        )}
+      >
+        <div>
+          <span className="pl-4 pt-1 font-bold">Department:</span>
+          <select
+            className="ml-2 mt-1 mb-2"
+            defaultValue=""
+            onChange={(event) => {
+              parseDepartmentFilter(
+                event.target.value !== "all" ? event.target.value : undefined
+              );
+            }}
+          >
+            <option value="all">All</option>
+            <option value="65455">65455</option>
+            <option value="65456">65456</option>
+          </select>
+        </div>
         <Button
           onClick={onExportPDF}
           className="ml-4 bg-app-primary hover:bg-app-primary-hover text-white"
@@ -202,8 +211,9 @@ export function ReportViz({ user }: ReportVizProps) {
       </div>
       <TableauViz
         ref={vizRef}
-        width="1000px"
+        width={isMobile ? "420px" : "1200px"}
         height="900px"
+        device={isMobile ? "phone" : "desktop"}
         src="https://public.tableau.com/views/OverbudgetTravel/Dashboard1"
         toolbar="hidden" // Hide entire toolbar
         hideTabs
